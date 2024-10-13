@@ -11,4 +11,6 @@ public class User
     [Required] [MaxLength(100)] public string Password { get; set; }
 
     [Required] [EmailAddress] public string Email { get; set; }
+    public ICollection<Post> Posts { get; set; }
+
 }
