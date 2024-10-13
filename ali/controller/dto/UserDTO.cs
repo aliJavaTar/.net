@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ali.controller.dto;
 
-public class UserRequest
+public class UserDTO
 {
     [Required]
     [MaxLength(50)]

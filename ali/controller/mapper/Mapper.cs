@@ -8,7 +8,7 @@ public class Mapper : Profile
 {
     public Mapper()
     {
-        CreateMap<User, UserRequest>().ReverseMap();
+        CreateMap<User, UserDTO>().ReverseMap();
         CreateMap<Post, PostRequest>().ReverseMap();
         CreateMap<Post, PostResponse>().ReverseMap();
     }
