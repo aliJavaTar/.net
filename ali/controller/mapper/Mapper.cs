@@ -8,8 +8,8 @@ public class Mapper : Profile
 {
     public Mapper()
     {
-        CreateMap<User, UserRequest>()
-            .ForMember(request => request.Username, user 
-                => user.MapFrom(entity => entity.Username));
+        CreateMap<User, UserRequest>().ReverseMap();
+        CreateMap<Post, PostRequest>().ReverseMap();
+        CreateMap<Post, PostResponse>().ReverseMap();
     }
 }
