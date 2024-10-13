@@ -1,0 +1,6 @@
+@ali_HostAddress = http://localhost:5080
+
+GET {{ali_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
