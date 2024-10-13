@@ -4,5 +4,5 @@ namespace ali.service;
 
 public interface IUserService
 {
-    Task<UserDTO> crate(UserDTO dto);
+    Task<UserDTO> Create(UserDTO dto);
 }

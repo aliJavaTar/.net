@@ -5,17 +5,14 @@ using AutoMapper;
 
 namespace ali.service;
 
-public class UserService : IUserService
+public class UserService(IUserRepository userRepository, IMapper mapper) : IUserService
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IMapper _mapper;
-    public async Task<UserDTO> crate(UserDTO dto)
+    public async Task<UserDTO> Create(UserDTO dto)
     {
-        var user = _mapper.Map<User>(dto);
-        await _userRepository.CreateUserAsync(user);
-        await _userRepository.SaveChangesAsync();
-        
-        return _mapper.Map<UserDTO>(user);
+        var user = mapper.Map<User>(dto);
+        await userRepository.CreateUserAsync(user);
+        await userRepository.SaveChangesAsync();
 
+        return mapper.Map<UserDTO>(user);
     }
 }

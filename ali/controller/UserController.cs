@@ -6,19 +6,12 @@ namespace ali.controller;
 
 [ApiController]
 [Route("api/users")]
-public class UserController : ControllerBase
+public class UserController(IUserService userService) : ControllerBase
 {
-    private readonly IUserService _userService;
-
-    public UserController(IUserService userService)
-    {
-        _userService = userService;
-    }
-
     [HttpPost]
     public IActionResult CreateUser([FromBody] UserDTO dto)
     {
-        _userService.crate(dto);
+        userService.Create(dto);
         return Ok();
     }
 }
