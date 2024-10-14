@@ -6,4 +6,5 @@ public interface IUserService
 {
     Task<UserDTO> Create(UserDTO dto);
     Task<UserDTO> Update(int id, UserDTO dto);
+    Task<UserDTO> GetById(int userId);
 }

@@ -6,11 +6,6 @@ namespace ali.repository;
 
 public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
 {
-    async Task<bool> IUserRepository.SaveChangesAsync()
-    {
-        return (await dbContext.SaveChangesAsync()) > 0;
-    }
-
     public async Task CreateUserAsync(User user)
     {
         if (user == null)
@@ -19,21 +14,17 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
         }
 
         await dbContext.Users.AddAsync(user);
+        await dbContext.SaveChangesAsync();
     }
 
-    public async Task<User> Modify(int id, User user)
+    public Task<User> Modify(int id, User user)
     {
-        var userFound = await dbContext.Users.FindAsync(id);
+        throw new NotImplementedException();
+    }
 
-        if (userFound == null)
-        {
-            throw new ArgumentException($"User with id {id} not found.");
-        }
 
-        User entity = dbContext.Users.Update(user).Entity;
-
-        await dbContext.SaveChangesAsync();
-
-        return entity;
+    public async Task<User> FindById(int userId)
+    {
+        return await dbContext.Users.FindAsync(userId) ?? throw new AggregateException("User not found");
     }
 }
