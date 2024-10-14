@@ -9,7 +9,7 @@ public class Mapper : Profile
     public Mapper()
     {
         CreateMap<User, UserDTO>().ReverseMap();
-        CreateMap<Post, PostRequest>().ReverseMap();
-        CreateMap<Post, PostResponse>().ReverseMap();
+        // CreateMap<Post, PostRequest>().ReverseMap();
+        // CreateMap<Post, PostResponse>().ReverseMap();
     }
 }
