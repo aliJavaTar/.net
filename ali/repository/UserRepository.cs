@@ -15,7 +15,7 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
     {
         if (user == null)
         {
-            throw new ArgumentNullException(nameof(user));
+            throw new ArgumentException("User is null");
         }
 
         await dbContext.Users.AddAsync(user);
@@ -30,7 +30,7 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
             throw new ArgumentException($"User with id {id} not found.");
         }
 
-        User entity = dbContext.Users.Update(userFound).Entity;
+        User entity = dbContext.Users.Update(user).Entity;
 
         await dbContext.SaveChangesAsync();
 
