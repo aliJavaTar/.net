@@ -28,4 +28,11 @@ public class UserController(IUserService userService) : ControllerBase
         var userDto = await userService.GetById(userId);
         return Ok(userDto);
     }
+
+    [HttpGet("/all")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var list = await userService.GetAllUsers();
+        return Ok(list);
+    }
 }

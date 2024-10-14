@@ -18,14 +18,20 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
     {
         var user = mapper.Map<User>(dto);
 
-        await userRepository.Modify(id, user);
+        var updatedUser = await userRepository.Modify(id, user);
 
-        return mapper.Map<UserDTO>(user);
+        return mapper.Map<UserDTO>(updatedUser);
     }
 
-    public async Task<UserDTO> GetById(int userId)
+    public async Task<User> GetById(int userId)
     {
-        var userEntity = await userRepository.FindById(userId);
-        return mapper.Map<UserDTO>(userEntity);
+        return await userRepository.FindById(userId);
+    }
+
+    public async Task<List<UserDTO>> GetAllUsers()
+    {
+        var result = await userRepository.FindAll();
+
+        return mapper.Map<List<UserDTO>>(result);
     }
 }
