@@ -12,7 +12,15 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
         var user = mapper.Map<User>(dto);
         await userRepository.CreateUserAsync(user);
         await userRepository.SaveChangesAsync();
+        return mapper.Map<UserDTO>(user);
+    }
 
+    public async Task<UserDTO> Update(int id, UserDTO dto)
+    {
+        var user = mapper.Map<User>(dto);
+
+        await userRepository.Modify(id, user);
+        
         return mapper.Map<UserDTO>(user);
     }
 }
