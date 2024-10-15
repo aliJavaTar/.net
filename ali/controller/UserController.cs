@@ -15,15 +15,15 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(userDto);
     }
 
-    [HttpPut("{id?}")]
-    public async Task<IActionResult> CreateUser([FromRoute] int id , [FromBody] UserDTO dto)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateUser([FromRoute] int id , [FromBody] UserDTO dto)
     {
         var userDto = await userService.Update(id, dto);
         return Ok(userDto);
     }
 
     [HttpGet]
-    public async Task<IActionResult> CreateUser([FromQuery] int userId)
+    public async Task<IActionResult> GetById([FromQuery] int userId)
     {
         var userDto = await userService.GetById(userId);
         return Ok(userDto);
