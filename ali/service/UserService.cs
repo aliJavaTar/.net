@@ -5,13 +5,33 @@ using AutoMapper;
 
 namespace ali.service;
 
-public class UserService(IUserRepository userRepository, IMapper mapper) : IUserService
+public class UserService(IUserRepository userRepository, IMapper mapper, JwtService jwtService) : IUserService
 {
-    public async Task<UserDTO> Create(UserDTO dto)
+    public async Task<UserDTO> Register(UserDTO dto)
     {
-        var user = mapper.Map<User>(dto);
-        await userRepository.CreateUserAsync(user);
-        return mapper.Map<UserDTO>(user);
+        // var user = mapper.Map<User>(dto);
+
+        CreatePasswordHash(dto.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+        var userHashed = new User()
+        {
+            Username = dto.Username,
+            Email = dto.Email,
+            PasswordSalt = passwordSalt,
+            PasswordHash = passwordHash,
+        };
+
+        await userRepository.CreateUserAsync(userHashed);
+
+        return mapper.Map<UserDTO>(userHashed);
+    }
+
+    public async Task<UserDTO> Login(string username, string password)
+    {
+        var userFound = await userRepository.FindByUsername(username);
+        VerifyPassword(password, userFound.PasswordHash, userFound.PasswordSalt);
+
+        return new UserDTO();
     }
 
     public async Task<UserDTO> Update(int id, UserDTO dto)
@@ -30,8 +50,26 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
 
     public async Task<List<UserDTO>> GetAllUsers()
     {
-        var result = await userRepository.FindAll();
+        List<User> users = await userRepository.FindAll();
+        return mapper.Map<List<UserDTO>>(users);
+    }
 
-        return mapper.Map<List<UserDTO>>(result);
+
+    private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+    {
+        using var hmac = new System.Security.Cryptography.HMACSHA512();
+        passwordSalt = hmac.Key;
+        passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+    }
+
+    private void VerifyPassword(string password, byte[] storedHash, byte[] passwordSalt)
+    {
+        using var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt);
+        byte[] computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        bool isEqual = computeHash.SequenceEqual(storedHash);
+        if (!isEqual)
+        {
+            throw new System.Exception("Hash doesn't match");
+        }
     }
 }

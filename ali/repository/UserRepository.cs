@@ -38,6 +38,12 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
         return userFound;
     }
 
+    public async Task<User> FindByUsername(string username)
+    {
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Username == username);
+        return user ?? throw new ApplicationException("$User not found{ username }");
+
+    }
 
     public async Task<User> FindById(int userId)
     {

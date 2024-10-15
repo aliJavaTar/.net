@@ -9,4 +9,6 @@ public interface IUserRepository
     Task<User> FindById(int userId);
 
     Task<List<User>> FindAll();
+
+    Task<User> FindByUsername(string username);
 }
