@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ali.service;
 
-public class JwtService(string secretKey)
+public class JwtService(string secretKey) : IJwtService
 {
     public string GenerateToken(User user)
     {

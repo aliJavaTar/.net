@@ -5,7 +5,7 @@ using AutoMapper;
 
 namespace ali.service;
 
-public class UserService(IUserRepository userRepository, IMapper mapper, JwtService jwtService) : IUserService
+public class UserService(IUserRepository userRepository, IMapper mapper, IJwtService jwtService) : IUserService
 {
     public async Task<UserDTO> Register(UserDTO dto)
     {
@@ -31,7 +31,7 @@ public class UserService(IUserRepository userRepository, IMapper mapper, JwtServ
         var userFound = await userRepository.FindByUsername(username);
         VerifyPassword(password, userFound.PasswordHash, userFound.PasswordSalt);
         string token = jwtService.GenerateToken(userFound);
-
+        
         return new UserResponse()
         {
             Username = userFound.Username,
