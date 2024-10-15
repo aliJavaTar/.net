@@ -26,12 +26,18 @@ public class UserService(IUserRepository userRepository, IMapper mapper, JwtServ
         return mapper.Map<UserDTO>(userHashed);
     }
 
-    public async Task<UserDTO> Login(string username, string password)
+    public async Task<UserResponse> Login(string username, string password)
     {
         var userFound = await userRepository.FindByUsername(username);
         VerifyPassword(password, userFound.PasswordHash, userFound.PasswordSalt);
+        string token = jwtService.GenerateToken(userFound);
 
-        return new UserDTO();
+        return new UserResponse()
+        {
+            Username = userFound.Username,
+            Email = userFound.Email,
+            Token = token
+        };
     }
 
     public async Task<UserDTO> Update(int id, UserDTO dto)

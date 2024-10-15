@@ -9,4 +9,6 @@ public interface IUserService
     Task<UserDTO> Update(int id, UserDTO dto);
     Task<User> GetById(int userId);
     Task<List<UserDTO>> GetAllUsers();
+
+    Task<UserResponse> Login(string username, string password);
 }
