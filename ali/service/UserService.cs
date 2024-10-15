@@ -28,7 +28,7 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
 
     public async Task<UserResponse> Login(string username, string password)
     {
-        var jwtService = new JwtService("sadfwgfdshgaedrsh");
+        var jwtService = new JwtService("sadfdfsdsafasfdasfdasdfasfwgfdshgaedrsh");
         var userFound = await userRepository.FindByUsername(username);
         VerifyPassword(password, userFound.PasswordHash, userFound.PasswordSalt);
         string token = jwtService.GenerateToken(userFound);

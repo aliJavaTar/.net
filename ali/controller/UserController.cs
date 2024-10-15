@@ -1,5 +1,6 @@
 using ali.controller.dto;
 using ali.service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ali.controller;
@@ -29,7 +30,8 @@ public class UserController(IUserService userService) : ControllerBase
         var userDto = await userService.Update(id, dto);
         return Ok(userDto);
     }
-
+    
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetById([FromQuery] int userId)
     {
