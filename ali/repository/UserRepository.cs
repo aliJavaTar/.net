@@ -13,11 +13,14 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
             throw new ArgumentException("User is null");
         }
 
-        var userCreated = dbContext.Users.AddAsync(user).GetAwaiter().GetResult().Entity;
+        await dbContext.Users.AddAsync(user);
 
-        await dbContext.SaveChangesAsync();
+        if (await IsNotCommit())
+        {
+            throw new ApplicationException("User is not created");
+        }
 
-        return userCreated;
+        return user;
     }
 
     public async Task<User> Modify(int id, User user)
@@ -27,7 +30,11 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
         userFound.Username = user.Username;
         userFound.Email = user.Email;
 
-        await dbContext.SaveChangesAsync();
+        if (await IsNotCommit())
+        {
+            throw new ApplicationException("User not found");
+        }
+
         return userFound;
     }
 
@@ -39,6 +46,11 @@ public class UserRepository(ApplicationDbContext dbContext) : IUserRepository
 
     public async Task<List<User>> FindAll()
     {
-       return await dbContext.Users.ToListAsync() ?? throw new AggregateException("Users not found");
+        return await dbContext.Users.ToListAsync() ?? throw new AggregateException("Users not found");
+    }
+
+    private async Task<bool> IsNotCommit()
+    {
+        return await dbContext.SaveChangesAsync() == 0;
     }
 }

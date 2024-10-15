@@ -19,6 +19,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .IsUnique();
         
         modelBuilder.Entity<User>().Property(p => p.Id).ValueGeneratedOnAdd();
+
+
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+        
+        
         modelBuilder.Entity<User>()
             .Property(u => u.Id)
             .HasColumnName("id");
@@ -31,7 +38,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .Property(u => u.Email)
             .HasColumnName("email");
 
-     
+    
+        modelBuilder.Entity<User>()
+            .ToTable("","")
+            .HasKey(u=> u.Id);
+        
 
     }
 }
