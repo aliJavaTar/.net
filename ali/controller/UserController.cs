@@ -16,9 +16,9 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpPost("/login")]
-    public async Task<IActionResult> Login([FromBody] string username, [FromBody] string password)
+    public async Task<IActionResult> Login([FromBody] UserDTO dto)
     {
-        UserResponse response = await userService.Login(username, password);
+        UserResponse response = await userService.Login(dto.Username, dto.Password);
         return Ok(response);
     }
 

@@ -6,12 +6,19 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ali.service;
 
-public class JwtService(string secretKey) : IJwtService
+public class JwtService
 {
+    private readonly string _secretKey;
+
+    public JwtService(string secretKey)
+    {
+        _secretKey = secretKey;
+    }
+
     public string GenerateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        byte[] key = Encoding.UTF8.GetBytes(secretKey);
+        byte[] key = Encoding.UTF8.GetBytes(_secretKey);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

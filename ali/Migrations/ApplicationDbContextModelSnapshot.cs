@@ -37,6 +37,20 @@ namespace ali.Migrations
                         .HasColumnType("text")
                         .HasColumnName("email");
 
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("bytea")
+                        .HasColumnName("password_hash");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("bytea")
+                        .HasColumnName("password_salt");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text")

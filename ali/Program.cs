@@ -10,17 +10,31 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var builderConfiguration = builder.Configuration;
 
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builderConfiguration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAutoMapper(typeof(Mapper));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+// builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IJwtService, JwtService>();
+
+builder.Services.AddSingleton<IConfiguration>(sp => new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: true)
+    .Build());
+
+builder.Services.Configure<JwtBearerOptions>(options =>
+{
+    var key = Encoding.UTF8.GetBytes(builderConfiguration["Jwt:Secret"] ?? string.Empty);
+    options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(key);
+});
+
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "user", Version = "v1" }); });
