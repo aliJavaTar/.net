@@ -76,7 +76,7 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
         bool isEqual = computeHash.SequenceEqual(storedHash);
         if (!isEqual)
         {
-            throw new System.Exception("Hash doesn't match");
+            throw new Exception("Hash doesn't match");
         }
     }
 }
